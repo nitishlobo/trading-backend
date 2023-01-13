@@ -1,0 +1,90 @@
+# -------------------------------------------------------------------------------------------------
+# Linting
+# -------------------------------------------------------------------------------------------------
+
+[tool.autopep8]
+ignore = [
+    # Whitespace before ':'
+    "E203",
+    # Allow statements before imports
+    "E402"
+]
+
+[tool.black]
+line-length = 100
+include = '\.pyi?$'
+
+[tool.pylint.MESSAGE_CONTROL]
+disable = """
+    line-too-long,
+    logging-fstring-interpolation,
+    import-error,
+"""
+enable = "useless-suppression"
+
+[tool.pylint.REPORTS]
+reports = "no"
+
+[tool.pylint.FORMAT]
+max-line-length = "100"
+
+[tool.pylint.BASIC]
+good-names = "_,i,e,setUp,tearDown,maxDiff"
+
+[tool.pylint.DESIGN]
+exclude-too-few-public-methods = """
+    ^.*BaseModel$,
+    ^.*TradingBase$,
+"""
+
+
+# -------------------------------------------------------------------------------------------------
+# Testing
+# -------------------------------------------------------------------------------------------------
+
+[tool.pytest.ini_options]
+addopts = "-vv -rfEsP --maxfail=1 --tb=long --color=yes --code-highlight=yes --cov --cov-report html"
+
+
+# -------------------------------------------------------------------------------------------------
+# Code coverage
+# -------------------------------------------------------------------------------------------------
+
+[tool.coverage.run]
+omit = [
+    "*tests*",
+    "trading/settings.py",
+]
+source = ["trading"]
+data_file = ".coverage"
+
+[tool.coverage.report]
+omit = ["*tests*"]
+skip_empty = true
+
+# Show missing lines in terminal
+show_missing = true
+
+# Regexes for lines to exclude from consideration
+exclude_lines = [
+    # Have to re-enable the standard pragma
+    "pragma: no cover",
+
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    "if self.debug",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Don't complain if non-runnable code isn't run:
+    "if 0:",
+    "if __name__ == .__main__.:",
+
+    # Don't complain about abstract methods, they aren't run:
+    "@(abc.)?abstractmethod",
+]
+
+[tool.coverage.html]
+directory = "coverage_html_report"

@@ -1,0 +1,16 @@
+{
+	"recommendations": [
+		"ms-python.python",
+		"ms-python.vscode-pylance",
+		"usernamehw.errorlens",
+		"ms-python.isort",
+		"davidanson.vscode-markdownlint",
+		"codestream.codestream",
+		"christian-kohler.path-intellisense",
+		"tintinweb.vscode-inline-bookmarks",
+		"tomoki1207.pdf",
+		"mechatroner.rainbow-csv"
+	],
+	"unwantedRecommendations": [
+	]
+}

@@ -1,0 +1,14 @@
+# Python
+__pycache__
+.pytest_cache
+.env
+.venv
+*.egg-info
+
+# coverage / pytest-cov
+.coverage
+cov_html
+coverage_html_report
+
+# Mac OS related
+.DS_Store
