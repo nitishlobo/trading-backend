@@ -3,40 +3,231 @@
 # -------------------------------------------------------------------------------------------------
 
 [tool.autopep8]
+# https://github.com/hhatto/autopep8#Usage
+max_line_length = 100
 ignore = [
-    # Whitespace before ':'
-    "E203",
-    # Allow statements before imports
-    "E402"
+    "E203",     # Whitespace before ':' - (clashes with black)
+    "E402",     # Allow statements before imports
 ]
+
+# TODO: Add mypy configuration here
+# https://mypy.readthedocs.io/en/stable/config_file.html#example-pyproject-toml
+
+[tool.ruff]
+target-version = "py311"
+fix = true
+show-fixes = true
+show-source = true
+line-length = 100
+ignore-init-module-imports = true
+select = [
+    "F",      # pyflakes
+    "E",      # pycodestyle error
+    "W",      # pycodestyle warning
+    "C90",    # mccabe
+    "I",      # isort
+    "N",      # pep8-naming
+    "D",      # pydocstyle
+    # "UP",   # pyupgrade - (once python v. >=3.10, remove pyupgrade pre-commit hook uncomment & uncomment this)
+    "YTT",    # flake8-2020
+    "ANN",    # flake8-annotations
+    # "S",    # flake8-bandit - (premature; once matured, remove bandit pre-commit hook & uncomment this)
+    "BLE",    # flake8-blind-except
+    "FBT",    # flake8-boolean-trap
+    "B",      # flake8-bugbear
+    "A",      # flake8-builtins
+    "COM",    # flake8-commas
+    "C4",     # flake8-comprehensions
+    "DTZ",    # flake8-datetimez
+    "T10",    # flake8-debugger
+    "DJ",     # django - (not needed but future proofing, just incase)
+    "EM",     # flake8-errmsg
+    "EXE",    # flake8-executable
+    "ISC",    # flake8-implicit-str-concat
+    "ICN",    # flake8-import-conventions
+    "G",      # flake8-logging-format
+    "INP",    # flake8-no-pep420
+    "PIE",    # flake8-pie
+    "T20",    # flake8-print
+    "PYI",    # flake8-pyi
+    "PT",     # flake8-pytest-style
+    "Q",      # flake8-quotes
+    "RSE",    # flake8-raise
+    "RET",    # flake8-return
+    "SLF",    # flake8-self
+    "SIM",    # flake8-simplify
+    "TID",    # flake8-tidy-imports
+    "TCH",    # flake8-type-checking
+    "INT",    # flake8-gettext
+    "ARG",    # flake8-unused-arguments
+    "PTH",    # flake8-use-pathlib
+    # "ERA",  # eradicate - (buggy, uncomment once this feature has matured)
+    "PD",     # pandas-vet - (not needed but future proofing, just incase)
+    # "PGH",  # pygrep-hooks - (remove from pre-commit and uncomment once ruff matures and finishes implementing it)
+    # "PL",   # pylint - (remove from pre-commit and uncomment once ruff matures and finishes implementing it)
+    "TRY",    # tryceratops
+    "NPY",    # numpy - (not needed but future proofing, just incase)
+    "RUF",    # ruff
+]
+ignore = [
+    "A002",     # builtin shadowing - covered by pylint redefined-builtin
+    "ANN101",   # annotation on self in class (unnecessary)
+    "ANN102",   # annotation on cls in classmethod (unnecessary)
+    "ARG001",   # unused function argument - covered by pylint unused-argument
+    "ARG002",   # unused method argument - covered by pylint unused-argument
+    "D207",     # docstring under-indentation
+    "D208",     # docstring over-indentation
+    "D400",     # first line ends-in-period
+    "D415",     # first line ends-in-punctuation
+    "E501",     # line-too-long (caught by pylint C0301)
+    "G004",     # logging-format-interpolation (no point unless we establish a whitelist convention/whitelist)
+    "RUF100",   # unused-noqa - (buggy, remove yesqa from pre-commit and remove this once it has matured)
+    "SLF001",   # private member access - covered by pylint protected-access
+]
+unfixable = [
+    "D207",     # docstring under-indentation
+    "D208",     # docstring over-indentation
+    "D400",     # first line ends-in-period
+    "D415",     # first line ends-in-punctuation
+    "E711",     # none-comparison - (changes `== None` to `is None`, disabled for sql alchemy filter usage)
+    "E712",     # true-false-comparison - (changes `== True` to `is True`, disabled for sql alchemy filter usage)
+    "E714",     # not-is-test - (changes `!=` to `is not`, disabled for sql alchemy filter usage)
+    "RUF100",   # unused-noqa - (buggy, remove yesqa from pre-commit and remove this once it has matured)
+]
+
+[tool.ruff.isort]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+[tool.ruff.pep8-naming]
+classmethod-decorators = ["pydantic.validator"]
+
+[tool.ruff.pycodestyle]
+max-doc-length = 100
+
+[tool.ruff.pydocstyle]
+convention = "pep257"
 
 [tool.black]
 line-length = 100
-include = '\.pyi?$'
+target-version = ['py311']
+exclude = '''
+(
+    env/
+    | build/
+    | buck-out/
+    | dist/
+    | _build/
+    | \.eggs/
+    | \.git/
+    | \.hg/
+    | \.mypy_cache/
+    | \.nox/
+    | \.tox/
+    | \.venv/
+)
+'''
 
-[tool.pylint.MESSAGE_CONTROL]
-disable = """
-    line-too-long,
-    logging-fstring-interpolation,
-    import-error,
-"""
-enable = "useless-suppression"
+[tool.pylint.main]
+load-plugins = ["pylint_pydantic"]
+extension-pkg-whitelist = "pydantic"
 
-[tool.pylint.REPORTS]
-reports = "no"
+# Files or directories to be skipped. They should be base names, not paths.
+ignore = ["CVS"]
 
-[tool.pylint.FORMAT]
-max-line-length = "100"
+# Add files or directories matching the regular expressions patterns to the
+# ignore-list. The regex matches against paths and can be in Posix or Windows
+# format. Because '\\' represents the directory delimiter on Windows systems, it
+# can't be used as an escape character.
+# ignore-paths =
 
-[tool.pylint.BASIC]
-good-names = "_,i,e,setUp,tearDown,maxDiff"
+# Files or directories matching the regular expression patterns are skipped. The
+# regex matches against base names, not paths. The default value ignores Emacs
+# file locks
+ignore-patterns = ["^\\.#"]
 
-[tool.pylint.DESIGN]
+# Use multiple processes to speed up Pylint. Specifying 0 will auto-detect the
+# number of processors available to use, and will cap the count on Windows to
+# avoid hangs.
+jobs = 0
+
+# Minimum Python version to use for version dependent checks. Will default to the
+# version used to run pylint.
+py-version = "3.11"
+
+# When enabled, pylint would attempt to guess common misconfiguration and emit
+# user-friendly hints instead of false-positive error messages.
+suggestion-mode = true
+
+[tool.pylint.basic]
+good-names = "_, e, i, n, setUp, tearDown, maxDiff"
+
+[tool.pylint.design]
+# List of regular expressions of class ancestor names to ignore when counting
+# public methods (see R0903)
 exclude-too-few-public-methods = """
     ^.*BaseModel$,
     ^.*TradingBase$,
 """
+min-public-methods = 1
 
+[tool.pylint.format]
+max-line-length = 100
+
+[tool.pylint."messages control"]
+# Disable the message, report, category or checker with the given id(s). You can
+# either give multiple identifiers separated by comma (,) or put this option
+# multiple times (only on the command line, not in the configuration file where
+# it should appear only once). You can also use "--disable=all" to disable
+# everything first and then re-enable specific checks. For example, if you want
+# to run only the similarities checker, you can use "--disable=all
+# --enable=similarities". If you want to run only the classes checker, but have
+# no Warning level messages displayed, use "--disable=all --enable=classes
+# --disable=W".
+disable = [
+    "logging-fstring-interpolation",
+    "missing-module-docstring",     # caught by ruff D100
+    "missing-class-docstring",      # caught by ruff D101
+    "missing-function-docstring"    # caught by ruff D103
+]
+
+# Enable the message, report, category or checker with the given id(s). You can
+# either give multiple identifier separated by comma (,) or put this option
+# multiple time (only on the command line, not in the configuration file where it
+# should appear only once). See also the "--disable" option for examples.
+enable = [
+    "c-extension-no-member",
+    "useless-suppression"
+]
+
+[tool.pylint.reports]
+# Set the output format. Available formats are text, parseable, colorized, json
+# and msvs (visual studio). You can also give a reporter class, e.g.
+# mypackage.mymodule.MyReporterClass.
+# output-format =
+
+# Tells whether to display a full report or only the messages.
+# reports =
+
+[tool.pylint.similarities]
+# Minimum lines number of a similarity.
+min-similarity-lines = 4
+
+[tool.pylint.variables]
+# The default value here is _.*|^ignored_|^unused_, see
+# IGNORED_ARGUMENT_NAMES in https://github.com/pylint-dev/pylint/blob/main/pylint/checkers/variables.py
+# We extend this value to also match our test user fixtures.
+ignored-argument-names = "_.*|^ignored_|^unused_|^test_"
+
+# -------------------------------------------------------------------------------------------------
+# Security
+# -------------------------------------------------------------------------------------------------
+
+[tool.bandit]
+# https://bandit.readthedocs.io/en/latest/plugins/index.html#complete-test-plugin-listing
+exclude_dirs = ["tests"]
+
+[tool.bandit.assert_used]
+skips = ["*_test.py", "*/test_*.py", "**/conftest.py"]
 
 # -------------------------------------------------------------------------------------------------
 # Testing
@@ -44,7 +235,6 @@ exclude-too-few-public-methods = """
 
 [tool.pytest.ini_options]
 addopts = "-vv -rfEsP --maxfail=1 --tb=long --color=yes --code-highlight=yes --cov --cov-report html"
-
 
 # -------------------------------------------------------------------------------------------------
 # Code coverage
