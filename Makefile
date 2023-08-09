@@ -22,8 +22,8 @@ MAIN_APP = trading
 
 # Create python virtual environment
 create-venv:
-	$(PYTHON) -m venv $(VENV_DIR)
-	source $(VENV_DIR)/bin/activate \
+	$(PYTHON) -m venv $(VENV_DIR) \
+	&& $(VENV_DIR)\Scripts\activate \
 	&& pip install -r $(MAIN_APP)/requirements.txt \
 	&& pip install -r $(MAIN_APP)/requirements-dev.txt \
 	&& pip install -r tests/requirements.txt
@@ -66,4 +66,5 @@ lint:
 	pre-commit run -a
 
 run:
-	$(PYTHON) $(MAIN_APP)/main.py
+	cd $(MAIN_APP) \
+	&& uvicorn main:main_app --reload
