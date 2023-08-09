@@ -74,7 +74,7 @@ repos:
     -   id: text-unicode-replacement-char
         description: forbids files which have a UTF-8 Unicode replacement character
 -   repo: https://github.com/asottile/pyupgrade
-    rev: v3.3.1
+    rev: v3.10.1
     hooks:
     -   id: pyupgrade
         description: automatically upgrades syntax as per newer python versions
@@ -87,7 +87,7 @@ repos:
         # FIXME: autopep8 isn't picking up the global pyproject.toml.
         args: ["--ignore=E226,E24,W50,W690,E203", "--in-place"]
 - repo: https://github.com/charliermarsh/ruff-pre-commit
-  rev: "v0.0.264"
+  rev: "v0.0.283"
   hooks:
     -   id: ruff
         description: collection of several linting plugins (isort, flake8, mccabe, etc...)
@@ -99,12 +99,12 @@ repos:
 #     -   id: mypy
 #         description: static type checker for python
 -   repo: https://github.com/psf/black
-    rev: 23.1.0
+    rev: 23.7.0
     hooks:
     -   id: black
         description: opinionated code formatter
 -   repo: https://github.com/asottile/setup-cfg-fmt
-    rev: v2.2.0
+    rev: v2.4.0
     hooks:
     -   id: setup-cfg-fmt
         description: applies consistent format to `setup.cfg` files
@@ -123,7 +123,7 @@ repos:
         args: ["-c", "pyproject.toml"]
         additional_dependencies: ["bandit[toml]"]
 -   repo: https://github.com/pycqa/pylint
-    rev: v2.17.2
+    rev: v3.0.0a6
     hooks:
     -   id: pylint
         description: static code analyser - checks for errors, code smells, enforce coding standard, and make suggestions about refactoring code
